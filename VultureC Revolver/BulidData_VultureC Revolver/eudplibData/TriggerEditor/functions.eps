@@ -1,0 +1,54 @@
+
+
+const playerEPD = PVariable();
+const playerRevolverGauge = PVariable();
+
+const s = StringBuffer(1024);
+
+function SetNextUnitPTR(){
+    return dwread_epd(EPD(0x628438));
+}
+
+function SetNextUnitEPD(){
+    return epdread_epd(EPD(0x628438));
+}
+
+function SetNextUnitPtrEpd(){
+    return cunitepdread_epd(EPD(0x628438));
+}
+
+function playerRev() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        playerEPD[cp] = SetNextUnitEPD();
+        CreateUnit(1, 19, "PlayerRevive", cp);
+    }
+}
+
+const playerMove = PVariable();
+const playerHold = PVariable();
+
+function variableInit() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        playerMove[cp] = 1;
+    }
+}
+
+function detectHold() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        if(playerHold[cp] == 0 && playerMove[cp] == 1 && MemoryXEPD(playerEPD[cp] + 0x4D/4, Exactly, 107, 1) && playerRevolverGauge[cp] < 6) {
+            playerHold[cp] = 1;
+            playerMove[cp] = 0;
+            playerRevolverGauge[cp]++;
+        }
+        if(playerHold[cp] == 1 && playerMove[cp] == 0 && MemoryXEPD(playerEPD[cp] + 0x4D/4, Exactly, 6, 1)) {
+            playerMove[cp] = 1;
+            playerHold[cp] = 0;
+        }
+        s.printAt(0, playerHold[cp]);
+        s.printAt(1, playerMove[cp]);
+        eprintln("\x04현재 리볼버 게이지 : ", playerRevolverGauge[cp], " / 6");
+    }
+}

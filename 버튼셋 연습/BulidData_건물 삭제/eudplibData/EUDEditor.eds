@@ -1,0 +1,19 @@
+[main]
+input: ..\..\건물 삭제.scx
+output: ..\..\삭제 가능.scx
+[DataEditor.py]
+[ExtraDataEditor.py]
+[dataDumper]
+..\temp\custom_txt.tbl : 0x6D5A30, copy
+
+[TriggerEditor\main.eps]
+
+
+[chatEvent]
+__Addr__ : 0x58D900
+__ptrAddr__ : 0x58D904
+__patternAddr__ : 0x58D908
+__lenAddr__ : 0x58D90C
+
+
+

@@ -1,0 +1,21 @@
+import System as sys;
+import main as m;
+
+const s = StringBuffer(1024);
+
+const keySwitch = PVariable(); //0 On 1 Off
+
+function controllerText(cp) {
+    const mmX = sys.mouseUserX[cp]+320-sys.screenUserX[cp];
+	const mmY = sys.mouseUserY[cp];
+    if(276 <= mmX && mmX <= 360 && 296 <= mmY && mmY <= 307 && sys.mouseClick[cp] == 1) {
+        if(keySwitch[cp] == 0) {
+            keySwitch[cp] = 1;
+            s.printAt(1, "\n\n\n\n\n\n");
+        } else {
+            keySwitch[cp] = 0;
+            s.printAt(1, "\n\x13\x04[ A ]\t[ B ]\t[ C ]\t[ D ]\t[ E ]\t[ F ]\n\x13\x04[ G ]\t[ H ]\t[  I ]\t[ J ]\t[ K ]\t[ L ]\n\x13\x04[ M ]\t[ N ]\t[ O ]\t[ P ]\t[ Q ]\t[ R ]\n\x13\x04[ S ]\t[ T ]\t[ U ]\t[ V ]\t[ W ]\t[ X ]\n\x13\x04[ Y ]\t\t\t\t\t[ Z ]");
+        }
+    }
+    eprintln("\x04Keyboard : ", ptr2s(sys.keyboardStatus[keySwitch[cp]]));
+}

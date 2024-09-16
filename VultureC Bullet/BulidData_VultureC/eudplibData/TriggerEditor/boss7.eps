@@ -1,0 +1,103 @@
+import functions as fx;
+
+var bossLoc = $L("Boss");
+var bulInitLoc = $L("S61");
+const bul7Loc = [$L("S62"), $L("S63"), $L("S64"), $L("B61"), $L("B62"), $L("B63"), $L("B64")];
+var bul7Time = 0;
+
+var boss7EPD;
+var boss7Face;
+var boss7AttkCycle;
+var boss7TargetEPD;
+var boss7TargetPlayer;
+
+const s = StringBuffer(1024);   
+
+function stage7() {
+    boss7Face = bread_epd(boss7EPD + 0x21/4, 1);
+    boss7AttkCycle = bread_epd(boss7EPD + 0x55/4, 1);
+
+    once {
+        SetMemory(0x657A9C, SetTo, 18);
+        dwwrite(0x6C9858 + 1696 + 184 * 4, 1200);
+        bwrite(0x666778 + 14000 + 524 * 1, 10);
+        fx.setBulletDam(6, 5);
+        fx.setBulletDam(3, 10);
+    }
+
+    if(fx.cur_bSwitch() == 0) { //보스 소환
+        boss7EPD = fx.SetNextUnitEPD();
+        CreateUnit(1, 79, bossLoc, 6);
+        fx.set_bSwitch(1);
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(2, "\x13\x1E━━━\x02━━━\x04━━ \x1F[ \x08위   험 \x1F]\x04 ━━\x02━━━\x1E━━━\n\n\x13\x07[\x04 Stage \x087 \x07]\n\n\x13\x1E타락한 \x03고위기사\n\n\x13\x1E━━━\x02━━━━\x04━━━━━━━\x02━━━━\x1E━━━━");
+        }
+    }
+
+    fx.playerRevive(); //플레이어 소환
+
+    fx.printBossHP(boss7EPD);
+
+    fx.lockdown();
+
+    if(bul7Time == 72) {
+        for(var i = 0; i < 7; i++) {
+            MoveLocation(bul7Loc[i], 104, 7, bulInitLoc);
+            addloc(bul7Loc[i], rand() % 736, rand() % 736);
+            CreateUnit(1, 13, bul7Loc[i], 7);
+        }
+    }
+    
+    if(bul7Time == 96) {
+        RemoveUnit(13, 7);
+        for(var i = 0; i < 7; i++) {
+            CreateUnit(7, 199, bul7Loc[i], 7);
+            setcurpl(7);
+            RunAIScriptAt("JYDg", bul7Loc[i]);
+        }
+        bul7Time = 0;
+    }
+    bul7Time++;
+
+    if(fx.bulletTimer(96) == True) {
+        MoveLocation("B5", 104, 6, bulInitLoc);
+        addloc("B5", rand() % 736, 0);
+        CreateUnit(1, 196, "B5", 6);
+        Order(196, 6, "B5", Move, bossLoc);
+        MoveLocation("B5", 104, 6, bulInitLoc);
+        addloc("B5", 0, rand() % 736);
+        CreateUnit(1, 196, "B5", 6);
+        Order(196, 6, "B5", Move, bossLoc);
+        MoveLocation("B5", 104, 6, bulInitLoc);
+        addloc("B5", rand() % 736, 720);
+        CreateUnit(1, 196, "B5", 6);
+        Order(196, 6, "B5", Move, bossLoc);
+        MoveLocation("B5", 104, 6, bulInitLoc);
+        addloc("B5", 720, rand() % 736);
+        CreateUnit(1, 196, "B5", 6);
+        Order(196, 6, "B5", Move, bossLoc);
+    }
+
+    GiveUnits(1, 196, 6, bossLoc, 7);
+
+    if(fx.bulletTimer(240) == True) {
+        setcurpl(7);
+        RunAIScriptAt("JYDg", bossLoc);
+    }
+    
+    
+    if(Deaths(6, Exactly, 1, 79)) {
+        KillUnit(19, Force1);
+        fx.set_bSwitch(0);
+        fx.set_pSwitch(0);
+        fx.set_Stage(8);
+        fx.bulletInit();
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            CenterView("PlayerRevive");
+            Victory();
+        }
+    }
+}

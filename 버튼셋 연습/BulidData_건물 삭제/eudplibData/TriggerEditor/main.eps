@@ -1,0 +1,17 @@
+import PluginVariables as msqcvar;
+import functions as fx;
+
+function onPluginStart() {
+
+
+}
+
+function beforeTriggerExec() {
+
+	SetMemory(0x6509A0, SetTo, 0); //EUD터보
+}
+
+function afterTriggerExec() {
+
+	fx.buttonSet();
+}

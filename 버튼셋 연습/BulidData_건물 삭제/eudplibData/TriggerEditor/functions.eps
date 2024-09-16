@@ -1,0 +1,39 @@
+import TriggerEditor.TETools as fx;
+import unitlooper as ul;
+
+var unitEPD;
+
+function SetNextUnitPTR(){
+    return dwread_epd(EPD(0x628438));
+}
+
+function SetNextUnitEPD(){
+    return epdread_epd(EPD(0x628438));
+}
+
+function SetNextUnitPtrEpd(){
+    return cunitepdread_epd(EPD(0x628438));
+}
+
+function buttonSet() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        if(Command(cp, Exactly, 0, 16)) {
+            unitEPD = SetNextUnitEPD();
+            CreateUnit(1, 16, "Start", cp);
+        }
+        if(Command(cp, AtLeast, 1, 16) && fx.BuildCheckEPD(unitEPD, 9)) {
+            fx.BuildResetEPD(unitEPD);
+            MoveLocation("Target", 16, cp, "Anywhere");
+            GiveUnits(All, "(buildings)", 7, "Target", 6);
+            foreach(ptr, epd : ul.LoopPUnit(6)) {
+                const unitID = wread_epd(epd + 0x64/4, 0);
+                const unitOre = wread(0x65FD00 + 15240 + unitID * 2);
+                const unitGas = wread(0x65FD00 + 0 + unitID * 2);
+                SetResources(cp, Add, unitOre, Ore);
+                SetResources(cp, Add, unitGas, Gas);
+            }
+            KillUnitAt(All, "(buildings)", "Target", 6);
+        }
+    }
+}

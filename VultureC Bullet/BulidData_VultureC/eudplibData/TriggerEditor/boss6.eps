@@ -1,0 +1,150 @@
+import functions as fx;
+
+var bossLoc = $L("Boss");
+var boss6EPD;
+var boss6Face;
+var boss6AttkCycle;
+var boss6BulTime = 0;
+var boss6CenterPhase = 0;
+var boss6OuterTime = 0;
+
+const bul6Loc = [$L("B61"), $L("B62"), $L("B63"), $L("B64")];
+const bul6InitLoc = [$L("S61"), $L("S62"), $L("S63"), $L("S64")];
+
+const s = StringBuffer(1024);
+
+function centerPattern1();
+function centerPattern2();
+function centerPattern3();
+function centerPattern4();
+function centerPattern5();
+function stage6() {
+    boss6Face = bread_epd(boss6EPD + 0x21/4, 1);
+    boss6AttkCycle = bread_epd(boss6EPD + 0x55/4, 1);
+
+    once {
+        wwrite(0x6C9858 + 2752 + 146 * 2, 359); //비행정보 146 탄환 스프라이트 359로 변형
+        dwwrite(0x6C9858 + 1696 + 146 * 4, 520); //비행정보 146 최고 속도 변환
+    }
+    
+    if(fx.cur_bSwitch() == 0) {
+        boss6EPD = fx.SetNextUnitEPD();
+        CreateUnit(1, 51, bossLoc, 6);
+        fx.set_bSwitch(1);
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(2, "\x13\x1E━━━\x02━━━\x04━━ \x1F[ \x08위   험 \x1F]\x04 ━━\x02━━━\x1E━━━\n\n\x13\x07[\x04 Stage \x086 \x07]\n\n\x13\x04지옥의 \x03여제\n\n\x13\x1E━━━\x02━━━━\x04━━━━━━━\x02━━━━\x1E━━━━");
+        }
+    }
+    fx.playerRevive();
+
+    fx.printBossHP(boss6EPD);
+
+    if(fx.bulletTimer(48) == True) { //중앙 탄막
+        CreateUnit(14, 194, bossLoc, 7);
+        setcurpl(7);
+        RunAIScriptAt("JYDg", bossLoc);
+    }
+
+    if(0 <= boss6BulTime && boss6BulTime < 144) {
+        centerPattern1();
+    } else if(144 <= boss6BulTime && boss6BulTime < 240) {
+        centerPattern2();
+    } else if(240 <= boss6BulTime && boss6BulTime < 280) {
+        centerPattern3((boss6BulTime - 240) / 4);
+    } else if(280 <= boss6BulTime && boss6BulTime < 472) {
+        centerPattern4();
+    } else if(472 <= boss6BulTime && boss6BulTime < 664) {
+        centerPattern5();
+    }
+
+    boss6BulTime++;
+    if(boss6BulTime == 663) {
+        boss6BulTime = 0;
+    }
+
+    boss6OuterTime++;
+    if(boss6OuterTime == 48) {
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            if(Bring(cp, Exactly, 1, 19, "Field") && !Bring(cp, Exactly, 1, 19, "B6In")) {
+                fx.dotDeal(3, cp);
+            }
+        }
+        boss6OuterTime = 0;
+    }
+
+    //보스 탄막
+    if(203 < boss6AttkCycle && boss6AttkCycle <= 227) { //보스 평타 발사
+        SetMemory(0x657A9C, SetTo, (boss6AttkCycle - 203) * 31 / 24);
+    } else if(179 < boss6AttkCycle && boss6AttkCycle <= 203) {
+        SetMemory(0x657A9C, SetTo, 0);
+    } else if(155 < boss6AttkCycle && boss6AttkCycle <= 179) {
+        SetMemory(0x657A9C, SetTo, (179 - boss6AttkCycle) * 31 / 24);
+    } else {
+        SetMemory(0x657A9C, SetTo, 31);
+    }
+
+    if(Deaths(6, Exactly, 1, 51)) {
+        KillUnit(19, Force1);
+        fx.set_bSwitch(0);
+        fx.set_pSwitch(0);
+        fx.set_Stage(7);
+        fx.bulletInit();
+        fx.playerBlockInit();
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            CenterView("PlayerRevive");
+        }
+    }
+}
+
+function centerPattern1() {
+    for(var i = 0; i < 4; i++) {
+        MoveLocation(bul6Loc[i], 104, 7, bul6InitLoc[i]);
+        fx.PolarLocation(bul6Loc[i], 736, ((90 * i) + boss6BulTime * 90 / 144) % 360);
+        CreateUnit(1, 90, bul6Loc[i], 7);
+        KillUnit(90, 7);
+    }
+}
+
+function centerPattern2() {
+    for(var i = 0; i < 4; i++) {
+        MoveLocation(bul6Loc[i], 104, 7, bul6InitLoc[i]);
+        fx.PolarLocation(bul6Loc[i], (boss6BulTime - 144) * 500 / 96, ((90 * i) + 45) % 360);
+        CreateUnit(1, 90, bul6Loc[i], 7);
+        KillUnit(90, 7);
+    }
+}
+
+function centerPattern3(j) {
+    for(var i = 0; i < 4; i++) {
+        MoveLocation(bul6Loc[i], 104, 7, bossLoc);
+        fx.PolarLocation(bul6Loc[i], 32 * (j + 1) + 16, i * 90);
+        CreateUnit(1, 90, bul6Loc[i], 7);
+        KillUnit(90, 7);
+    }
+}
+
+function centerPattern4() {
+    for(var i = 0; i < 4; i++) {
+        for(var j = 1; j < 12; j++) {
+            MoveLocation(bul6Loc[i], 104, 7, bossLoc);
+            fx.PolarLocation(bul6Loc[i], 32 * j + 16, ((i * 90) + (boss6BulTime - 280) * 270 / 192) % 360);
+            CreateUnit(1, 90, bul6Loc[i], 7);
+        }
+    }
+    KillUnit(90, 7);
+}
+
+function centerPattern5() {
+    for(var i = 0; i < 4; i++) {
+        for(var j = 1; j < 12; j++) {
+            MoveLocation(bul6Loc[i], 104, 7, bossLoc);
+            fx.PolarLocation(bul6Loc[i], 32 * j + 16, ((i * 90) + (270 - (boss6BulTime - 472) * 270 / 192)) % 360);
+            CreateUnit(1, 90, bul6Loc[i], 7);
+        }
+    }
+    KillUnit(90, 7);
+}

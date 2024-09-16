@@ -1,0 +1,12 @@
+import PluginVariables as msqcvar;
+import StringBuffer as sb;
+
+function beforeTriggerExec() {
+
+        sb.example();
+}
+
+function afterTriggerExec() {
+
+	SetMemory(0x6509A0, SetTo, 0); //EUD터보
+}

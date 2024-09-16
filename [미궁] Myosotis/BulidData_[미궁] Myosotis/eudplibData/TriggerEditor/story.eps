@@ -1,0 +1,65 @@
+import Opening as op;
+import functions as fx;
+import mainStory as ms;
+import Questions as qu;
+import Ending as ed;
+
+function Main() {
+    switch(fx.current_Chapter()) {
+        case 0:
+            op.intro();
+            break;
+        case 10:
+            op.opening();
+            break;
+        case 1:
+            ms.Chapter1();
+            break;
+        case 11:
+            qu.Question1();
+            break;
+        case 2:
+            ms.Chapter2();
+            break;
+        case 12:
+            qu.Question2();
+            break;
+        case 3:
+            ms.Chapter3();
+            break;
+        case 13:
+            qu.Question3();
+            break;
+        case 4:
+            ms.Chapter4();
+            break;
+        case 14:
+            qu.Question4();
+            break;
+        case 5:
+            ms.Chapter5();
+            break;
+        case 15:
+            qu.Question5();
+            break;
+        case 6:
+            ms.Chapter6();
+            break;
+        case 16:
+            qu.Question6();
+            break;
+        case 7:
+            ms.Chapter7();
+            break;
+        case 17:
+            qu.Question7();
+            break;
+        case 8:
+            ed.finale();
+            break;
+        case 9:
+            ed.EndingCredit();
+        default:
+            break;
+    }
+}

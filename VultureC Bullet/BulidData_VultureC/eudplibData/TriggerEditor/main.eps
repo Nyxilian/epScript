@@ -1,0 +1,60 @@
+import PluginVariables as msqcvar;
+import StageSwitch as ss;
+import functions as fx;
+import bgm as bgm;
+
+const s = StringBuffer(1024);
+
+function onPluginStart() {
+
+	SetMemory(0x657A9C, SetTo, 0);
+	fx.SingleBan();
+	fx.SpeedBan();
+	fx.playerCheck();
+	fx.set_vulHP();
+	bgm.play_init();
+	foreach(cp : EUDLoopPlayer("Computer")) {
+		setcurpl(cp);
+		SetAllianceStatus(Force1, Enemy);
+	}
+	foreach(cp : EUDLoopPlayer("Human")) {
+		setcurpl(cp);
+		RunAIScript("+Vi6");
+	}
+	SetMemory(0x5124F0, SetTo, 21); //2배속
+	
+	fx.bossHP_init();
+}
+
+function beforeTriggerExec() {
+
+	fx.timeFlow();
+	fx.moveLoc();
+	fx.dontLeave();
+	if(fx.stage != 5) {
+		fx.bulletRemover();
+	}
+	fx.playerLimiter();
+	fx.playerBlockade();
+	bgm.play();
+}
+
+function afterTriggerExec() {
+
+	ss.stage();
+	fx.actionLoc();
+	fx.defeatCheck();
+	fx.Invulnerability();
+	foreach(cp : EUDLoopPlayer("Human")) {
+		setcurpl(cp);
+		if(fx.off_bgm(cp)) {
+			s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+			s.printfAt(5, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x07Ctrl + SS\x04를 눌러 \x03브금\x04을 꺼주세요\n\x13\x1FInsert \x04키를 눌러 다시 킬 수 있습니다");
+		}
+		if(fx.on_bgm(cp)) {
+			s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+			s.printAt(5, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x03브금\x04을 켰습니다");
+		}
+	}
+	SetMemory(0x6509A0, SetTo, 0); //EUD터보
+}

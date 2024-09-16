@@ -1,0 +1,488 @@
+import TriggerEditor.TETools as tt;
+import unitlooper as ul;
+import bgm as bgm;
+
+const s = StringBuffer(1024);
+
+var bossLoc = $L("Boss");
+var bulletTime = 0;
+var playerSwitch = 0; //0 Off, 1 On
+var bossSwitch = 0; //0 Off, 1 On
+var stage = 6;
+
+var playerNum = 0;
+
+const addHp = [0, 150, 300, 450, 600, 750];
+const loc = [$L("P1"), $L("P2"), $L("P3"), $L("P4"), $L("P5"), $L("P6")];
+const outerLoc = [$L("Outer1"), $L("Outer2"), $L("Outer3"), $L("Outer4")];
+
+const Invulnerability_Time = PVariable();
+const Invulnerability_Switch = PVariable();
+const Invulnerability_Skill_Switch = PVariable();
+
+const prize = [$L("61"), $L("62"), $L("31"), $L("32"), $L("11")];
+
+//-----구조 오프셋--------
+function SetNextUnitPTR(){
+    return dwread_epd(EPD(0x628438));
+}
+
+function SetNextUnitEPD(){
+    return epdread_epd(EPD(0x628438));
+}
+
+function SetNextUnitPtrEpd(){
+    return cunitepdread_epd(EPD(0x628438));
+}
+
+//-----스테이지 및 보스, 플레이어 관련---------
+
+function playerCheck() {
+    playerNum = 0;
+    foreach(ptr, epd : EUDLoopUnit2()) {
+        if(MemoryXEPD(epd + 0x64/4, Exactly, 120, 0xFFFF)) {
+            playerNum++;
+        }
+    }
+}
+
+function set_vulHP() {
+    if(2 <= playerNum && playerNum <=3) {
+        dwwrite(0x65FD00 + 9808 + 19 * 4, 32000);//19번 체력 125로 설정
+    }
+    if(4 <= playerNum) {
+        dwwrite(0x65FD00 + 9808 + 19 * 4, 25600);//19번 체력 100으로 설정
+    }
+}
+
+function cur_Stage() {
+    return stage;
+}
+
+function set_Stage(num) {
+    stage = num;
+}
+
+function cur_bSwitch() {
+    return bossSwitch;
+}
+
+function set_bSwitch(num) {
+    bossSwitch = num;
+}
+
+function set_pSwitch(num) {
+    playerSwitch = num;
+}
+
+function set_bossHP(unit) {
+    dwwrite(0x65FD00 + 9808 + unit * 4, dwread(0x65FD00 + 9808 + unit * 4) + addHp[playerNum - 1] * 256);
+}
+
+function bossHP_init() {
+    set_bossHP(15);
+    set_bossHP(16);
+    set_bossHP(48);
+    set_bossHP(58);
+    set_bossHP(68);
+    set_bossHP(51);
+    set_bossHP(79);
+    for(var i = 0; i < 5; i++) {
+        CreateUnit(1, 215 + i, prize[i], 7);
+    }
+}
+
+const playerEPD = PVariable();
+
+function playerRevive() {
+    if(playerSwitch == 0) {
+        foreach(cp : EUDLoopPlayer("Human")) {
+            playerEPD[cp] = SetNextUnitEPD();
+            CreateUnit(1, 19, "PlayerRevive", cp);
+        }
+        playerSwitch = 1;
+    }
+}
+
+function playerLimiter() {
+    if(Bring(Force1, AtLeast, 3, 19, "Field")) {
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            for(var i = 0; i < 4; i++) {
+                if(Bring(cp, Exactly, 1, 19, outerLoc[i])) {
+                    MoveUnit(1, 19, cp, outerLoc[i], "PlayerRevive");
+                    s.printAt(6, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x04최대 \x07두 명\x04까지 \x08입장 \x03가능\x04합니다.");
+                }
+            }
+        }
+    }
+}
+
+const playerBlock = PVariable();
+const playerBlockTime = PVariable();
+
+function playerBlockAction(cp);
+function playerBlockade() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        if(Bring(cp, Exactly, 1, 19, "Field") && playerBlock[cp] == 0) {
+            playerBlockTime[cp] = 960;
+            playerBlock[cp] = 1;
+        }
+        if(playerBlock[cp] == 1) {
+            if(0 < playerBlockTime[cp]) {
+                if(playerBlockTime[cp] < 940) {
+                    playerBlockAction(cp);
+                }
+                playerBlockTime[cp]--;
+            }
+        }
+        if(!Bring(cp, Exactly, 1, 19, "Field") && playerBlock[cp] == 1) {
+            playerBlockTime[cp] = 0;
+            playerBlock[cp] = 0;
+        }
+        if(playerBlockTime[cp] == 1) {
+            s.printAt(6, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x04다시 \x07밖으로 \x04나갈 수 \x03있습니다.");
+        }
+    }
+}
+
+function playerBlockAction(cp) {
+    if(Bring(cp, Exactly, 1, 19, outerLoc[0])) {
+        addloc(loc[cp], 0, 16);
+        MoveUnit(1, 19, cp, "Anywhere", loc[cp]);
+        s.printAt(6, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x04진입 후 \x0720초\x04간은 나갈 수 \x08없습니다.");
+    }
+    if(Bring(cp, Exactly, 1, 19, outerLoc[1])) {
+        addloc(loc[cp], 16, 0);
+        MoveUnit(1, 19, cp, "Anywhere", loc[cp]);
+        s.printAt(6, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x04진입 후 \x0720초\x04간은 나갈 수 \x08없습니다.");
+    }
+    if(Bring(cp, Exactly, 1, 19, outerLoc[2])) {
+        addloc(loc[cp], 0, -16);
+        MoveUnit(1, 19, cp, "Anywhere", loc[cp]);
+        s.printAt(6, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x04진입 후 \x0720초\x04간은 나갈 수 \x08없습니다.");
+    }
+    if(Bring(cp, Exactly, 1, 19, outerLoc[3])) {
+        addloc(loc[cp], -16, 0);
+        MoveUnit(1, 19, cp, "Anywhere", loc[cp]);
+        s.printAt(6, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x04진입 후 \x0720초\x04간은 나갈 수 \x08없습니다.");
+    }
+}
+
+function playerBlockInit() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        playerBlock[cp] = 0;
+        playerBlockTime[cp] = 0;
+    }
+}
+
+function defeatCheck() {
+    if(stage > 0 && playerSwitch == 1 && Command(Force1, Exactly, 0, 19)) {
+        foreach(cp : EUDLoopPlayer()) {
+            setcurpl(cp);
+            Defeat();
+        }
+    }
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        if(Deaths(cp, Exactly, 1, 37)) {
+            s.printAt(6, "\x13\x04밴 당하셨습니다");
+            Defeat();
+        }
+    }
+}
+
+function SingleBan(){
+	const a = 0x6D0F48; //방이름
+	const b = 0x6D0F78; //방장닉
+	const c = Db("");
+	if(strcmp(a, b) == 0){
+		foreach(cp : EUDLoopPlayer('Human', None, None)){
+			setcurpl(cp);
+			s.print("\x13\x1EUDP 플레이는 금지하고 있습니다.\n\x13\x04만약 방제가 방장닉네임일 경우 플레이가 불가능하니 다른 방제로 설정해주세요.");
+			Defeat();
+		}
+	}
+	else if(strcmp(b, c) == 0){
+		foreach(cp : EUDLoopPlayer('Human', None, None)){
+			setcurpl(cp);
+			s.print("\x13\x1E싱글 플레이는 금지하고 있습니다.");
+			Defeat();
+		}
+	}
+}
+
+function SpeedBan(){
+	const a = dwread_epd_safe(EPD(0x51CE84));
+	const b = dwread_epd_safe(EPD(0x51CE88));
+	if(a == 1000){if(b == 1000) return;}		//턴레이트24
+	else if(a == 1042){if(b == 1190) return;}	//턴레이트20
+	else if(a == 1302){if(b == 1488) return;}	//턴레이트16
+	else if(a == 1488){if(b == 1701) return;}	//턴레이트14
+	else if(a == 1736){if(b == 1984) return;}	//턴레이트12
+	else if(a == 2083){if(b == 2381) return;}	//턴레이트10
+	else if(a == 2604){if(b == 2976) return;}	//턴레이트8
+	else{
+		foreach(cp : EUDLoopPlayer('Human', None, None)){
+			setcurpl(cp);
+			s.print("\x13\x1E배속 플레이는 금지하고 있습니다.");
+			Defeat();
+		}
+	}
+}
+
+function printBossHP(epd) {
+    var currentUnitNum = wread_epd(epd + 0x64/4, 0);
+    var currentUnitHP = dwread_epd(epd + 0x8/4) / 256;
+    var currentUnitMaxHP = dwread(0x65FD00 + 9808 + currentUnitNum * 4) /256;
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        eprintln("\x04현재 \x07보스 \x08체력\x04: " , currentUnitHP, " / ", currentUnitMaxHP);
+    }
+}
+
+//-------탄환 함수 ---------
+function timeFlow() {
+    bulletTime++;
+}
+
+function bulletTimer(time) {
+    if(bulletTime % time == 0) {
+        return True;
+    }
+    return False;
+}
+
+function bulletRemover() {
+    for(var i = 6; i < 8; i++) {
+        RemoveUnitAt(All, "(buildings)", "Outer1", i);
+        RemoveUnitAt(All, "(buildings)", "Outer2", i);
+        RemoveUnitAt(All, "(buildings)", "Outer3", i);
+        RemoveUnitAt(All, "(buildings)", "Outer4", i);
+    }
+}
+
+function bulletReflector() {
+    for(var i = 0; i < 4; i++) {
+        GiveUnits(All, 195, 7, outerLoc[i], 6);
+        Order(195, 6, outerLoc[i], Move, bossLoc);
+        Order(199, 6, outerLoc[i], Move, bossLoc);
+    }
+    RemoveUnitAt(All, 195, bossLoc, 6);
+    RemoveUnitAt(All, 199, bossLoc, 6);
+}
+
+function bulletInit() {
+    for(var i = 6; i < 8; i++) {
+        RemoveUnitAt(All, "(buildings)", "Field", i);
+    }
+}
+
+function SetMissileDir(currentMissile, angle) {
+    bwrite_epd(currentMissile + 0x21/4, 1, angle);
+    bwrite_epd(currentMissile + 0x23/4, 3, angle);
+}
+
+function bulletStrike(BulletPlayer, BulletUnit, HitPoint, cp, EffectUnit) {
+    if(Bring(BulletPlayer, AtLeast, 1, BulletUnit, loc[cp])) {
+        foreach(ptr, epd : ul.LoopPUnit(cp)) {
+            if (MemoryXEPD(epd + 0x64/4, Exactly, 19, 0xFFFF) && Invulnerability_Skill_Switch[cp] == 0) {
+                SetMemoryEPD(epd + 0x8/4, Subtract, HitPoint * 256);
+                if(MemoryEPD(epd + 0x8/4, Exactly, 0)) {
+                    KillUnitAt(All, 19, loc[cp], cp);
+                }
+            }
+        }
+        CreateUnit(1, EffectUnit, loc[cp], cp);
+        KillUnitAt(1, EffectUnit, "Anywhere", cp);
+        KillUnitAt(1, BulletUnit, loc[cp], BulletPlayer);
+    }
+}
+
+function dotDeal(HP, cp) {
+    foreach(ptr, epd : ul.LoopPUnit(cp)) {
+        if (MemoryXEPD(epd + 0x64/4, Exactly, 19, 0xFFFF) && Invulnerability_Skill_Switch[cp] == 0) {
+            SetMemoryEPD(epd + 0x8/4, Subtract, HP * 256);
+            if(MemoryEPD(epd + 0x8/4, Exactly, 0)) {
+                KillUnit(19, cp);
+            }
+        }
+    }
+}
+
+const leaveLoc = [$L("100"), $L("101"), $L("102"), $L("103")];
+
+function dontLeave() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        for(var i = 0; i < 4; i++) {
+            if(Bring(cp, Exactly, 1, 19, leaveLoc[i])) {
+                MoveUnit(1, 19, cp, leaveLoc[i], "PlayerRevive");
+                s.printAt(6, "\x13\x1F[  \x04알    림  \x1F]\n\n\x13\x03밖\x04으로 나가실 수 \x08없습니다");
+            }
+        }
+    }
+}
+
+//------벌쳐관련 함수-------
+function moveLoc() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        if(Command(cp, Exactly, 0, 19) && playerSwitch == 1) {
+            MoveLocation(loc[cp], 120, cp, "Anywhere");
+        } else {
+            MoveLocation(loc[cp], 19, cp, "Anywhere");
+        }
+        foreach(ptr, epd : ul.LoopPUnit(cp)) {
+            if (MemoryXEPD(epd + 0x64/4, Exactly, 19, 0xFFFF)) {
+                SetMemoryEPD(epd + 0x60/4, SetTo, 100 * 256);
+            }
+        }
+    }
+}
+
+const bulletDam = [20, 20, 15, 25, 25, 10];
+
+function setBulletDam(bulletNum, damage) {
+    bulletDam[bulletNum] = damage;
+}
+
+function actionLoc() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        for(var i = 6; i < 8; i++) {
+            for(var j = 0; j < 6; j++) {
+                bulletStrike(i, 194 + j, bulletDam[j], cp, 21);
+            }
+        }
+        bulletStrike(7, 90, 3, cp, 103);
+    }
+}
+
+function lockdown() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        if(MemoryXEPD(playerEPD[cp] + 0x117/4, AtLeast, 0x6000000, 0xFF000000)) {
+            SetMemoryXEPD(playerEPD[cp] + 0x117/4, SetTo, 0x6000000, 0xFF000000);
+        }
+    }
+}
+
+
+//-------벌쳐 무적 스킬-------
+function button_Invulnerability() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        if(Command(cp, AtLeast, 1, 19) && tt.BuildCheckEPD(playerEPD[cp], 89)) {
+            tt.BuildResetEPD(playerEPD[cp]);
+            if(Invulnerability_Switch[cp] == 0) {
+                Invulnerability_Time[cp] = 960;
+                Invulnerability_Switch[cp] = 1;
+                Invulnerability_Skill_Switch[cp] = 1;
+                SetInvincibility(Enable, 19, cp, "Anywhere");
+            } else {
+                s.printAt(10, "\x13\x07스킬\x04이 \x08쿨타임 \x04중입니다");
+            }
+        }
+    }
+}
+
+function Invulnerability_Timer() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        if(Invulnerability_Switch[cp] == 1) {
+            Invulnerability_Time[cp]--;
+        }
+        if(Invulnerability_Time[cp] == 922) {
+            SetInvincibility(Disable, 19, cp, "Anywhere");
+            Invulnerability_Skill_Switch[cp] = 0;
+        }
+        if(Invulnerability_Time[cp] == 0 && Invulnerability_Switch[cp] == 1) {
+            Invulnerability_Switch[cp] = 0;
+            s.printAt(10,"\x13\x07스킬\x04의 \x08쿨타임\x04이 끝났습니다");
+        }
+        s.printAt(0, "\x12\x07퇴장 \x03쿨타임\x04: ", playerBlockTime[cp] / 48, "초  /  ", "\x12\x07스킬\x03 쿨타임: \x04", Invulnerability_Time[cp] / 48,"초");
+    }
+}
+
+function skill_Invulnerability() {
+    foreach(cp : EUDLoopPlayer("Human")) {
+        if(Invulnerability_Skill_Switch[cp] == 1) {
+        }
+    }
+}
+
+function Invulnerability() {
+    button_Invulnerability();
+    Invulnerability_Timer();
+    skill_Invulnerability();
+}
+
+//---------기타 함수---------
+function PolarLocation(loc: TrgLocation ,length ,angle) {
+    /*ToolTip
+    Korean
+    var loc;
+    을;
+    var length;
+    만큼;
+    var angle;
+    ° 으로 이동시킵니다.;
+    Korean
+    English
+    English
+    */
+    const x, y = lengthdir(length, angle);
+    const locTable = EPD(0x58DC4C) + 5*loc;
+    SetMemoryEPD(locTable + 0, Add, x);
+    SetMemoryEPD(locTable + 2, Add, x);
+    SetMemoryEPD(locTable + 1, Add, y);
+    SetMemoryEPD(locTable + 3, Add, y);
+}
+
+function press_Ins(cp) {
+    if(Deaths(cp, Exactly, 1, "Power Generator")) {
+        return True;
+    }
+    return False;
+}
+
+function press_Del(cp) {
+    if(Deaths(cp, Exactly, 2, "Power Generator")) {
+        return True;
+    }
+    return False;
+}
+
+function off_bgm(cp) {
+    if(press_Del(cp) == True && bgm.current_switch(cp) == 1) {
+        bgm.set_switch(cp, 0);
+        return True;
+    }
+    return False;
+}
+
+function on_bgm(cp) {
+    if(press_Ins(cp) == True && bgm.current_switch(cp) == 0) {
+        bgm.set_switch(cp, 1);
+        bgm.set_length(cp, 0);
+        return True;
+    }
+    return False;
+}
+
+function press_Z(cp) {
+    if(Deaths(cp, Exactly, 4, "Power Generator")) {
+        return True;
+    }
+    return False;
+}
+
+function press_X(cp) {
+    if(Deaths(cp, Exactly, 8, "Power Generator")) {
+        return True;
+    }
+    return False;
+}

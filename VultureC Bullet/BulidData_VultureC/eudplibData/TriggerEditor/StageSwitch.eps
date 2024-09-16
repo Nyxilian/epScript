@@ -1,0 +1,41 @@
+import functions as fx;
+import opening as op;
+import boss1 as b1;
+import boss2 as b2;
+import boss3 as b3;
+import boss4 as b4;
+import boss5 as b5;
+import boss6 as b6;
+import boss7 as b7;
+
+const s = StringBuffer(1024);
+
+function stage() {
+    switch(fx.cur_Stage()) {
+        case 0:
+            op.select();
+            break;
+        case 1:
+            b1.stage1();
+            break;
+        case 2:
+            b2.stage2();
+            break;
+        case 3:
+            b3.stage3();
+            break;
+        case 4:
+            b4.stage4();
+            break;
+        case 5:
+            b5.stage5();
+            break;
+        case 6:
+            b6.stage6();
+            break;
+        case 7:
+            b7.stage7();
+        default:
+            break;
+    }
+}

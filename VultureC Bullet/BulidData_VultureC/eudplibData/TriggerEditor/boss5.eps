@@ -1,0 +1,93 @@
+import functions as fx;
+
+var bossLoc = $L("Boss");
+var boss5EPD;
+var boss5Face;
+var boss5AttkCycle;
+var boss5TargetEPD;
+var boss5TargetPlayer;
+var bulletHead = 0;
+var bulletSwitch = 0;
+
+const s = StringBuffer(1024);
+
+function stage5() {
+    boss5Face = bread_epd(boss5EPD + 0x21/4, 1);
+    boss5AttkCycle = bread_epd(boss5EPD + 0x55/4, 1);
+
+    once {
+        wwrite(0x6C9858 + 2752 + 163 * 2, 195); //비행정보 163 탄환 스프라이트스카웃 변형
+        dwwrite(0x6C9858 + 1696 + 163 * 4, 1400); //비행정보 163 최고 속도 변환
+        wwrite(0x665AC0 + 1696 + 195 * 2, 365); //스프라이트 195 이미지 365으로 변환
+        fx.setBulletDam(1, 15);
+    }
+    
+    if(fx.cur_bSwitch() == 0) {
+        boss5EPD = fx.SetNextUnitEPD();
+        CreateUnit(1, 68, bossLoc, 6);
+        fx.set_bSwitch(1);
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(2, "\x13\x1E━━━\x02━━━\x04━━ \x1F[ \x08위   험 \x1F]\x04 ━━\x02━━━\x1E━━━\n\n\x13\x07[\x04 Stage \x115 \x07]\n\n\x13\x1E혹한의 \x03거인\n\n\x13\x1E━━━\x02━━━━\x04━━━━━━━\x02━━━━\x1E━━━━");
+        }
+    }
+    fx.playerRevive();
+
+    fx.printBossHP(boss5EPD);
+
+    fx.bulletReflector();//중앙 탄막
+
+    if(fx.bulletTimer(72) == True) {
+        CreateUnit(10, 195, bossLoc, 7);
+        setcurpl(7);
+        RunAIScriptAt("JYDg", bossLoc);
+    }
+
+    //보스 탄막
+    if(boss5AttkCycle == 191) { //보스 평타 발사
+        boss5TargetEPD = EPD(dwread_epd(boss5EPD + 0x5C/4));
+        boss5TargetPlayer = bread_epd(boss5TargetEPD + 0x4C/4, 0);
+        MoveLocation("BossTargetSmall", 19, boss5TargetPlayer, fx.loc[boss5TargetPlayer]);
+        MoveLocation("BossTarget", 19, boss5TargetPlayer, fx.loc[boss5TargetPlayer]);
+        CreateUnit(1, 196, bossLoc, 6);
+        Order(196, 6, bossLoc, Move, "BossTarget");
+    }
+
+    if(Bring(6, Exactly, 1, 196, "BossTargetSmall")) { //평타 도달 조건문
+        RemoveUnitAt(1, 196, "BossTargetSmall", 6);
+        bulletSwitch = 1;
+    }
+
+    if(fx.bulletTimer(3) == True && bulletSwitch == 1) {//도달시 산탄 생성
+        MoveLocation("B5", 104, 7, "BossTargetSmall");
+        fx.PolarLocation("B5", 64, 20 * (bulletHead % 18));
+        CreateUnit(1, 199, "B5", 7);
+        bulletHead++;
+    }
+
+    if(bulletHead % 18 == 17) {//산탄 중앙이동
+        bulletSwitch = 0;
+        Order(199, 7, "Anywhere", Move, "BossTargetSmall");
+    }
+
+    if(Bring(7, AtLeast, 1, 199, "BossTargetSmall")) {//정야독
+        GiveUnits(All, 199, 7, "BossTargetSmall", 6);
+        setcurpl(6);
+        RunAIScriptAt("JYDg", "BossTargetSmall");
+        bulletHead = 0;
+    }
+
+    if(Deaths(6, Exactly, 1, 68)) {
+        KillUnit(19, Force1);
+        fx.set_bSwitch(0);
+        fx.set_pSwitch(0);
+        fx.set_Stage(6);
+        fx.bulletInit();
+        fx.playerBlockInit();
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            CenterView("PlayerRevive");
+        }
+    }
+}

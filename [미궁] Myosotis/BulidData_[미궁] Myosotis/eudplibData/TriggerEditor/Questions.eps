@@ -1,0 +1,218 @@
+import functions as fx;
+
+const s = StringBuffer(1024);
+
+function Question1() {
+    fx.set_BG(31);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        if(fx.timer(0,240)) {
+            s.print("\x13이 미궁의 답은 모두 \x08영어\x02로만 되어 있습니다.\n\n\x13답이 4글자 이상일 경우 \x04앞의 4글자\x02가 정답이 됩니다.\n\n\x13\x07Ex) Myosotis → myos\n\n\x13답이 4글자 미만으로 남는 시민이 있는 경우에는 \x1DUnused\x02칸으로 가시면 됩니다.\n\n\x13브금은 \x1FDelete\x02키로 끌 수 있으며, \x1CInsert\x02키로 다시 키실 수 있습니다.\n\n\n");
+        }
+        if(fx.timer(240,432)) {
+            s.print("\x13모든 문제는 \x1F일기장\x02을 기반으로 나오며\n\n\x13\x1B\"Z\"\x02키를 누를시 1페이지, \x11\"X\"\x02를 누를시 2페이지가 나옵니다.\n\n\x13일기장의 내용을 읽고 \x1C답\x02을 도출해 내시면 됩니다.\n\n\n\x13이 미궁은 스토리가 \x08큰 비중\x02을 차지합니다.\n\n\n\x13그럼 \x03행운\x02을 빌겠습니다\n");
+        }
+        if(fx.timer(432,436)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.press_z(cp)) {
+            s.print("\x043월 8일 월요일 (1/2)\n\n\n\x02그와 사귄지도 벌써 \x183\x02년이다.\n그가 했던 모든 행동은 그동안 외로웠던 나에게 \x1F울타리\x02가 되어 주었다.\n그러나 요즘은 나보다 일이 먼저인건지 \x04편지\x02를 보내도 답이 없을 때가 많다.\n그래도 답신에는 항상 미안하다며 \x04편지\x02와 \x10선물\x02을 보낸다.\n선물에는 항상 \x15자물쇠\x02가 걸려 있지만\n단서를 보며 풀때면 정말 그 답다고 생각된다.\n\n\n");
+        }
+
+        if(fx.press_x(cp)) {
+            s.print("\x04-편지지-\n\n\n\x04벌써 \x1C3월\x04이오.\n\x06부러진 가위 한쪽\x04이 다른 한짝을 만나고서야\n\x04진정한 역할을 하듯이\n\x04당신과 함께 있어야 나도 존재할 수 있소.\n\x04나도 당신의 곁에 항상 있고 싶소. 사랑하오.\n\n\n\x1FGHWHFWLYH ");
+        }
+
+        if(Bring(Force1, Exactly, 1, "Terran Civilian", "1-1") &&
+            Bring(Force1, Exactly, 2, "Terran Civilian", "1-2") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "1-3")) {
+            fx.time_reset();
+            fx.Chapter_change(2);
+        }
+    }
+}
+
+function Question2() {
+    fx.set_BG(31);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.press_z(cp)) {
+            s.print("\x043월 9일 화요일 (1/3)\n\n\n\n\x02혼자 살게 된지 어언 \x078년\x02째.\n\n오늘은 부모님의 기일이다.\n부모님은 \x08불의의 사고\x02로 세상을 떠나셨다.\n\n그렇지만 나에게 \x1F대담\x02해 지라고 하신 말씀만큼은 항상 기억하고 있다.\n\n");
+        }
+
+        if(fx.press_x(cp)) {
+            s.print("\x043월 9일 화요일 (2/3)\n\n\x02비지..네..르? 라고 적혀있는 것 같다.\n아버지께서 남겨두신 유품이다.\n쪽지에는 이렇게 적혀있었다.\n\n\x04-쪽지-\n\n\x03대담\x04해지거라. \n\n\x1FNHVTPDH\x02");
+        }
+
+        if(Bring(Force1, Exactly, 1, "Terran Civilian", "2-1") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "2-2") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "2-3") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "2-4")) {
+            fx.Chapter_change(3);
+        }
+    }
+}
+
+function Question3() {
+    fx.set_BG(31);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.press_z(cp)) {
+            s.print("\x043월 10일 수요일 (1/2)\n\n\n\n\x02나는 의사에 의해 \x08우울증과 불면증 판정\x02을 받았다.\n이 말을 들은지도 벌써 \x1D4년\x02째다.\n\n중학생 시절 부모님이 돌아가시고\n커다란 벽에 막혀 현실을 마주했을 때 부터인 것 같다.\n점점 약이 강해지고 있다고 한다.\n\n");
+        }
+
+        if(fx.press_x(cp)) {
+            s.print("\x043월 10일 수요일 (2/2)\n함\x02 따윈\n\n\x02내 인생에 \x1F고귀 존재 하지 않아.\n\n누군가 나의 선장이 되어 나의 \x08???\x02를 잡아줄 순 없을까?\n\n인생의... 배의 \x08???\x02를 말이야...\n\n내 \x1F고귀함\x02을 감싸 안아주면서...\n\n");
+        }
+
+        if(Bring(Force1, Exactly, 1, "Terran Civilian", "3-1") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "3-2") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "3-3") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "3-4")) {
+            fx.Chapter_change(4);
+        }
+    }
+}
+
+function Question4() {
+    fx.set_BG(31);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.press_z(cp)) {
+            s.print("\x043월 11일 목요일 (1/2)\n\n\x02그를 만난 후 1년간은 내 인생에서 느낄 수 없었던\n가장 큰 \x08사랑\x02을 받았다.\n\n그러나 시간이 지날 수록 그가 나에게서\n멀어져 가고 있다는 생각이 든다.\n\n그를 위해 \x04편지\x02를 쓰지만, 그는 내 \x04편지\x02에 더이상 관심이 없는 것 같다.\n그도 다른 사람들과 같이 \x1D바뀌어 버린 걸까...?\n\n");
+        }
+
+        if(fx.press_x(cp)) {
+            s.print("\x043월 11일 목요일 (2/2)\n\n\n\x02어렸을 땐 \x04순박함\x02으로 포장이라도 됬지,\n\n성인인 지금은 핑계로 밖에 보이지 않을 뿐이야.\n\n비난과 부정적인 시선은 \x18쓴 나물\x02을 먹는 것 같아.\n\n\x08이 나물\x02로 나를 빗댈 수 있을 것 같아.\n\n");
+        }
+
+        if(Bring(Force1, Exactly, 1, "Terran Civilian", "4-1") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "4-2") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "4-3") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "4-4")) {
+            fx.Chapter_change(5);
+        }
+    }
+}
+
+function Question5() {
+    fx.set_BG(31);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.press_z(cp)) {
+            s.print("\x043월 12일 금요일 (1/2)\n\n\n\n\x02그에게선 \x08거짓말\x02처럼 아무 말도 없었다.\n얼굴은 고사하고 \x04편지\x02조차. 내 \x03생일\x02인데도 말이다.\n주말인데도, 나를 찾아와 주지 않았다.\n\n이 세상에 내가 기댈 곳은 아무 곳도 없다.\n시간이 지날수록 뼈저리게 느껴진다.\n\n");
+        }
+
+        if(fx.press_x(cp)) {
+            s.print("\x043월 12일 금요일 (2/2)\n\n\n\x07사랑이 이리도 슬픈\x02 걸까.\n기댔던 내가 바보인걸까?\n\n저 멀리서 \x1C울고 있는 나무\x02도\n나와 같은 상황은 아닐까?\n\n\x15저 나무\x02는 어떤 나무일까...?\n\n");
+        }
+
+        if(Bring(Force1, Exactly, 1, "Terran Civilian", "5-1") &&
+            Bring(Force1, Exactly, 2, "Terran Civilian", "5-2") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "5-3")) {
+            fx.Chapter_change(6);
+        }
+    }
+}
+
+function Question6() {
+    fx.set_BG(31);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.press_z(cp)) {
+            s.print("\x043월 13일 토요일 (1/2)\n\n\n\n\x10꽃은 언제나 아름답고,\x07 계절은 시간이 지나도 푸르른데\n\x02내 인생은 점차 나빠지기만 한다...\n더 이상 살 \x1E이유\x02가 있을까?\n\n내게 남은 건 없는데,\n\x08나 하나쯤은 사라져도 괜찮지 않을까?\n\n");
+        }
+
+        if(fx.press_x(cp)) {
+            s.print("\x043월 13일 토요일 (2/2)\n\n\n처음 맛본 \x06사랑\x02은 내가 어떤 삶을 살아왔어도\n모든걸 \x11망각\x02 시켜줬어.\n\n하지만 이제는 아니야.\n어떠한 사랑도 그저 나의 단순한 \x1E허상\x02임을\n깨달아 버렸기 때문이야.\n실제로는 \x1D존재하지 않거든.\n\n");
+        }   
+
+        if(Bring(Force1, Exactly, 4, "Terran Civilian", "6")) {
+            fx.Chapter_change(7);
+        }
+    }
+}
+
+function Question7() {
+    fx.set_BG(31);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.press_z(cp)) {
+            s.print("\x043월 14일 일요일\n\n\n\x02내가 죽으면 넌 \x1F이 일기\x02를 읽겠지...\n\n그동안 \x03고마웠어.\n\n\x04아몬드 꽃\x02은 영원히 우리 안에서 지지 않을거야.\n\n너만큼은 \x11행복\x02하길 바랄게...\n\n");
+        }
+
+        if(fx.press_x(cp)) {
+            s.printAt(9, "\x13\x04이 페이지는 비어있다.");
+        }
+
+        if(Bring(Force1, Exactly, 1, "Terran Civilian", "7-1") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "7-2") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "7-3") &&
+            Bring(Force1, Exactly, 1, "Terran Civilian", "7-4")) {
+            fx.Chapter_change(8);
+        }
+    }
+}

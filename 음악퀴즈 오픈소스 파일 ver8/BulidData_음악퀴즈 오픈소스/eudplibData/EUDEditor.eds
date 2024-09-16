@@ -1,0 +1,33 @@
+[main]
+input: ..\..\음악퀴즈 맵파일.scx
+output: E:\StarCraft\Maps\음악맞추기\음악퀴즈 오픈소스_.scx
+[DataEditor.py]
+[ExtraDataEditor.py]
+[dataDumper]
+..\temp\custom_txt.tbl : 0x6D5A30, copy
+
+[TriggerEditor\main.eps]
+
+
+
+[chatEvent]
+__addr__: 0x58D900
+스파이더맨: 2
+이누야샤: 3
+마비노기: 4
+셜록: 5
+!강퇴1: 1000
+!강퇴2: 1001
+!강퇴3: 1002
+!강퇴4: 1003
+!강퇴5: 1004
+!강퇴6: 1005
+!강퇴7: 1006
+[MSQC]
+QCDebug : False
+Mo.Exactly(0); 마우스 : 1
+MouseDown(L) : Cave-in, 1
+0x58D900, AtLeast, 1;val, 0x58D900: Jump Gate
+K; NotTyping : Kyadarin Crystal Formation, 1
+P; NotTyping : Kyadarin Crystal Formation, 2
+

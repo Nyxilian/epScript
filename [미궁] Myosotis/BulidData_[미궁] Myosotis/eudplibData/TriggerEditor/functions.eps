@@ -1,0 +1,79 @@
+import bgm as bgm;
+
+var timer_switch = False;
+var i_timer = 0;
+var Chapter = 0; 
+
+function set_BG(number) { //배경 밝기 0 ~ 31
+    SetMemory(0x657A9C, SetTo, number);
+}
+
+function time_flow() { //프레임++
+    if(Chapter < 12) {
+        i_timer++;
+    }
+}
+
+function timer(time1, time2) { //프레임단위임 주의할 것.
+    if(i_timer >= time1 && i_timer < time2) {
+        return True;
+    }
+    return False;
+}
+
+function time_reset() { //타임 리셋
+    i_timer = 0;
+}
+
+function Chapter_change(number) { //챕터 변환
+    Chapter = number;
+}
+
+function current_Chapter() { //현재 챕터
+    return Chapter;
+}
+
+function press_z(cp) {
+    if(Deaths(cp, Exactly, 1, "Power Generator")) {
+        return True;
+    }
+    return False;
+}
+
+function press_x(cp) {
+    if(Deaths(cp, Exactly, 2, "Power Generator")) {
+        return True;
+    }
+    return False;
+}
+
+function press_Ins(cp) {
+    if(Deaths(cp, Exactly, 3, "Power Generator")) {
+        return True;
+    }
+    return False;
+}
+
+function press_Del(cp) {
+    if(Deaths(cp, Exactly, 4, "Power Generator")) {
+        return True;
+    }
+    return False;
+}
+
+function off_bgm(cp) {
+    if(press_Del(cp) == True && bgm.current_switch(cp) == 1) {
+        bgm.set_switch(cp, 0);
+        return True;
+    }
+    return False;
+}
+
+function on_bgm(cp) {
+    if(press_Ins(cp) == True && bgm.current_switch(cp) == 0) {
+        bgm.set_switch(cp, 1);
+        bgm.set_length(cp, 408);
+        return True;
+    }
+    return False;
+}

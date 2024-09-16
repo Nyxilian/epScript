@@ -1,0 +1,22 @@
+[main]
+input: ..\..\메뉴 만들기.scx
+output: ..\..\메뉴 만들기 연습용.scx
+[DataEditor.py]
+[ExtraDataEditor.py]
+[dataDumper]
+
+
+
+[chatEvent]
+__Addr__ : 0x58D900
+__ptrAddr__ : 0x58D904
+__patternAddr__ : 0x58D908
+__lenAddr__ : 0x58D90C
+
+
+[MSQC]
+QCDebug : False
+MouseDown(L); val, 0x6CDDC4 : mouseUserX
+MouseDown(L); val, 0x6CDDC8 : mouseUserY
+MouseDown(L); val, screenSizeX : screenUserX
+

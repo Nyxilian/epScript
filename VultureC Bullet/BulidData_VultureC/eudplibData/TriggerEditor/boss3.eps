@@ -1,0 +1,61 @@
+import functions as fx;
+
+var bossLoc = $L("Boss");
+var boss3EPD;
+var boss3Face;
+var boss3AttkCycle;
+
+const s = StringBuffer(1024);
+
+function stage3() {
+    boss3Face = bread_epd(boss3EPD + 0x21/4, 1);
+    boss3AttkCycle = bread_epd(boss3EPD + 0x55/4, 1);
+    
+    once {
+        fx.setBulletDam(4, 20);
+    }
+
+    if(fx.cur_bSwitch() == 0) { //보스 소환
+        boss3EPD = fx.SetNextUnitEPD();
+        CreateUnit(1, 48, bossLoc, 6);
+        fx.set_bSwitch(1);
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(2, "\x13\x1E━━━\x02━━━\x04━━ \x1F[ \x08위   험 \x1F]\x04 ━━\x02━━━\x1E━━━\n\n\x13\x07[\x04 Stage \x033 \x07]\n\n\x13\x04폭풍의 \x03궤멸충\n\n\x13\x1E━━━\x02━━━━\x04━━━━━━━\x02━━━━\x1E━━━━");
+        }
+    }
+    
+    fx.playerRevive(); //플레이어 소환
+
+    fx.printBossHP(boss3EPD);
+
+    if(fx.bulletTimer(40) == True) { //중앙 미사일
+        CreateUnit(8, 195, bossLoc, 7);
+        setcurpl(7);
+        RunAIScriptAt("JYDg", bossLoc);
+    }
+
+    if(boss3AttkCycle % 12 == 0 && boss3AttkCycle > 59) { //보스 기본 공격
+        var currentMissile;
+        for(var i = 0; i < 8; i++) {
+            currentMissile = fx.SetNextUnitEPD();
+            CreateUnit(1, 198, bossLoc, 6);
+            fx.SetMissileDir(currentMissile, (boss3Face + 32*i) % 256);
+        }   
+        Order(198, 6, "Anywhere", Move, "PlayerRevive");
+    }
+
+    if(Deaths(6, Exactly, 1, 48)) {
+        KillUnit(19, Force1);
+        fx.set_bSwitch(0);
+        fx.set_pSwitch(0);
+        fx.set_Stage(4);
+        fx.bulletInit();
+        fx.playerBlockInit();
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            CenterView("PlayerRevive");
+        }
+    }
+}

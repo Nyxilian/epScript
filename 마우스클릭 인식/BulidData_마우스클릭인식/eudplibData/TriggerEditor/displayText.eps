@@ -1,0 +1,87 @@
+import PluginVariables as msqcvar;
+import System as sys;
+
+const t = StringBuffer(1024); //이 스트링버퍼는 만들어둔 텍스트를 담아둬야 하기 때문에 간단한 출력용으로는
+const s = StringBuffer(1024); //따로 스트링버퍼를 하나 더 만들어서 이친구로 간단출력을 해야함.
+
+var color1 = 0; var color2 = 0;
+
+function displayAction1(cp); //c언어처럼 미리 함수를 선언해서 에러가 뜨지 않게 함.
+function displayText1(cp){ //상대좌표를 이용한 텍스트
+	if(IsUserCP()){
+		//텍스트는 비공유이기 때문에 비공유 데이터를 그대로 가져와서 색상변화를 주는게 빠름.
+		//애초에 공유화된 데이터는 왼클릭을 해야만 얻을 수 있기때문에 실시간 색변화는 비공유 이용!
+		const mmX = sys.mouseX;
+		const mmY = sys.mouseY;
+		if(40 <= mmX && mmX <= 243 && 160 <= mmY && mmY <= 172){if(color1 == 0){color1 = 1; sys.textUpdate[cp] = 1;}}
+		else{if(color1 == 1){color1 = 0; sys.textUpdate[cp] = 1;}}
+		if(40 <= mmX && mmX <= 243 && 177 <= mmY && mmY <= 189){if(color2 == 0){color2 = 1; sys.textUpdate[cp] = 1;}}
+		else{if(color2 == 1){color2 = 0; sys.textUpdate[cp] = 1;}}
+		if(sys.textUpdate[cp] > 0){
+			sys.textUpdate[cp] = 0;
+			t.insert(0);
+			t.append("\x1E━━━━\x02━━━━\x04━━━상대좌표━━━\x02━━━━\x1E━━━━\n");
+			t.append("\n");
+			t.append("        \x02",ptr2s(sys.colorL[color1]),"[ 여기에 마우스를 올리면 색이 바뀌어요! ]\n");
+			t.append("        \x02",ptr2s(sys.colorL[color2]),"[ 여기에 마우스를 올리면 색이 바뀌어요! ]\n");
+			t.append("\n");
+			t.append("\x1E━━━━\x02━━━━\x04━━━━━━━━━━\x02━━━━\x1E━━━━");
+		}
+		t.DisplayAt(1); //텍스트를 위에서 생성한 후, 생성된 텍스트를 계속 띄워줌.
+	}
+	displayAction1(cp);
+}
+
+function displayAction1(cp){
+	if(sys.mouseClick[cp] == 1){ //왼클릭 했을 때
+		//이제 액션을 취할 땐, 모든 유저에게 공유된 데이터로 처리해야 방이 갈리지 않음.
+		const mmX = sys.mouseUserX[cp];
+		const mmY = sys.mouseUserY[cp];
+		if(40 <= mmX && mmX <= 243 && 160 <= mmY && mmY <= 172){
+			s.print("첫번째 리스트를 클릭했네요.");
+		}
+		if(40 <= mmX && mmX <= 243 && 177 <= mmY && mmY <= 189){
+			s.print("두번째 리스트를 클릭했네요.");
+		}
+	}
+}
+
+function displayAction2(cp); //c언어처럼 미리 함수를 선언해서 에러가 뜨지 않게 함.
+function displayText2(cp){ //상대좌표와 스크린사이즈를 이용한 중앙정렬 인식
+	if(IsUserCP()){
+		//텍스트는 비공유이기 때문에 비공유 데이터를 그대로 가져와서 색상변화를 주는게 빠름.
+		//애초에 공유화된 데이터는 왼클릭을 해야만 얻을 수 있기때문에 실시간 색변화는 비공유 이용!
+		const mmX = sys.mouseX+320-sys.screenSizeX;
+		const mmY = sys.mouseY;
+		if(218 <= mmX && mmX <= 422 && 160 <= mmY && mmY <= 172){if(color1 == 0){color1 = 1; sys.textUpdate[cp] = 1;}}
+		else{if(color1 == 1){color1 = 0; sys.textUpdate[cp] = 1;}}
+		if(218 <= mmX && mmX <= 422 && 177 <= mmY && mmY <= 189){if(color2 == 0){color2 = 1; sys.textUpdate[cp] = 1;}}
+		else{if(color2 == 1){color2 = 0; sys.textUpdate[cp] = 1;}}
+		if(sys.textUpdate[cp] > 0){
+			sys.textUpdate[cp] = 0;
+			t.insert(0);
+			t.append("\x13\x1E━━━━\x02━━━━\x04━━━중앙정렬━━━\x02━━━━\x1E━━━━\n");
+			t.append("\n");
+			t.append("\x13\x02",ptr2s(sys.colorL[color1]),"[ 여기에 마우스를 올리면 색이 바뀌어요! ]\n");
+			t.append("\x13\x02",ptr2s(sys.colorL[color2]),"[ 여기에 마우스를 올리면 색이 바뀌어요! ]\n");
+			t.append("\n");
+			t.append("\x13\x1E━━━━\x02━━━━\x04━━━━━━━━━━\x02━━━━\x1E━━━━");
+		}
+		t.DisplayAt(1); //텍스트를 위에서 생성한 후, 생성된 텍스트를 계속 띄워줌.
+	}
+	displayAction2(cp);
+}
+
+function displayAction2(cp){
+	if(sys.mouseClick[cp] == 1){ //왼클릭 했을 때
+		//이제 액션을 취할 땐, 모든 유저에게 공유된 데이터로 처리해야 방이 갈리지 않음.
+		const mmX = sys.mouseUserX[cp]+320-sys.screenUserX[cp];
+		const mmY = sys.mouseUserY[cp];
+		if(218 <= mmX && mmX <= 422 && 160 <= mmY && mmY <= 172){
+			s.print("첫번째 리스트를 클릭했네요.");
+		}
+		if(218 <= mmX && mmX <= 422 && 177 <= mmY && mmY <= 189){
+			s.print("두번째 리스트를 클릭했네요.");
+		}
+	}
+}

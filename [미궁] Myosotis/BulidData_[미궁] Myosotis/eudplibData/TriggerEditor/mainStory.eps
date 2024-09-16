@@ -1,0 +1,312 @@
+import functions as fx;
+
+const s = StringBuffer(1024);
+
+function Chapter1() {
+    fx.set_BG(0);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(0,24)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+        }
+        if(fx.timer(24,72)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(72,384)) {
+            s.printAt(0, "\n\n");
+            s.fadeIn("2041년 3월 15일", wait=6, line=2);
+        }
+
+        if(fx.timer(72, 168)) {
+            s.printAt(3, "\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(168, 384)) {
+            s.printAt(3, "\n\n\n\n\n\n");
+            s.printAt(7, "\x04\x13어제 나의 탐정사무소로 한 쪽지가 도착했다.");
+        }
+
+        if(fx.timer(240, 384)) {
+            s.printAt(8, "\x04\x13그 쪽지에는 \x03그녀\x04의 \x08사망\x04소식이 적혀 있었고,");
+        }
+
+        if(fx.timer(312, 384)) {
+            s.printAt(9, "\x04\x13나는 사실을 파헤치기 위해 \x03그녀\x04의 집으로 향했다.");
+        }
+
+        if(fx.timer(384, 388)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(7, "\x05\x13어제 나의 탐정사무소로 한 쪽지가 도착했다.");
+            s.printAt(8, "\x05\x13그 쪽지에는 그녀의 사망소식이 적혀 있었고,");
+            s.printAt(9, "\x05\x13나는 사실을 파헤치기 위해 그녀의 집으로 향했다.");
+        }
+
+        if(fx.timer(388, 432)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(432, 528)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x05\x13그녀\x01가 없는 집은 공허함만이 존재했다.");
+        }
+
+        if(fx.timer(528, 624)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x03\x13그녀\x04의 집을 돌아보던 중, \x03그녀\x04의 일기장을 발견했다.");
+        }
+
+        if(fx.timer(624, 808)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n");
+            s.printAt(8, "\x04\x13그 일기장은 2041년 1월 30일부터 하루도 빠짐없이 적혀있었다.");
+            s.printAt(9, "\n");
+        }
+
+        if(fx.timer(716, 808)) {
+            s.printAt(9, "\x04\x13비교적 최근 것부터 읽어보기로 했다.");
+        }
+
+        if(fx.timer(808,832)) {
+            CenterView("Answer");
+            fx.time_reset();
+            fx.Chapter_change(11);
+        }
+    }
+}
+
+function Chapter2() {
+    fx.set_BG(0);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(60, 72)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(72, 216)) {
+            s.printAt(0, "\x043월 8일 월요일 (2/2)");
+            s.printAt(1, "\n\n\n\n\n\n\n");
+            s.printAt(8, "그 안에는 \x15밤꽃\x02이 들어있었다.");
+        }
+
+        if(fx.timer(144, 216)) {
+            s.printAt(9, "그 어느때보다 그의 \x11진심\x02을 느낄 수 있었다.");
+        }
+
+        if(fx.timer(216, 220)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(220, 288)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x04(다음 페이지로 넘긴다)");
+        }
+
+        if(fx.timer(288, 300)) {
+            CenterView("Answer");
+            fx.time_reset();
+            fx.Chapter_change(12);
+        }
+    }
+}
+
+function Chapter3() {
+    fx.set_BG(0);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(60,72)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(72, 144)) {
+            s.printAt(0, "\x043월 9일 화요일 (3/3)");
+            s.printAt(1, "\n\n\n\n\n\n\n\n");
+            s.printAt(9, "그 안에는 시간이 지나 말라버린 \x18낙엽송\x02의 열매가 들어 있었다.");
+        }
+
+        if(fx.timer(144,168)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(168, 240)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x04나는 계속해서 일기장을 읽어 내려갔다.");
+        }
+
+        if(fx.timer(240,260)) {
+            CenterView("Answer");
+            fx.time_reset();
+            fx.Chapter_change(13);
+        }
+    }
+}
+
+function Chapter4() {
+    fx.set_BG(0);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(60,72)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(72, 192)) {
+            s.printAt(0, "\n\n\n\n\n\n\n");
+            s.printAt(8, "\x13\x04그 후 나는 식탁에서");
+        }
+
+        if(fx.timer(120, 192)) {
+            s.printAt(9, "\x13\x04텅 비어버린 \x08수면제 통\x04을 발견할 수 있었다.");
+        }
+
+        if(fx.timer(192,230)) {
+            CenterView("Answer");
+            fx.time_reset();
+            fx.Chapter_change(14);
+        }
+    }
+}
+
+function Chapter5() {
+    fx.set_BG(0);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(60,72)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(72,168)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x04난 그저 아무말 없이 읽어내려갔다.");
+        }
+
+        if(fx.timer(168, 190)) {
+            CenterView("Answer");
+            fx.time_reset();
+            fx.Chapter_change(15);
+        }
+    }
+}
+
+function Chapter6() {
+    fx.set_BG(0);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(60,72)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(72, 168)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x04......", wait=6, line=9);
+        }
+
+        if(fx.timer(168,172)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x05......");
+        }
+
+        if(fx.timer(172,176)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(176, 200)) {
+            CenterView("Answer");
+            fx.time_reset();
+            fx.Chapter_change(16);
+        }
+    }
+}
+
+function Chapter7() {
+    fx.set_BG(0);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(60,72)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(72, 168)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x04그렇다면... 설마...?", wait=4, line=9);
+        }
+
+        if(fx.timer(168,172)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(172,200)) {
+            CenterView("Answer");
+            fx.time_reset();
+            fx.Chapter_change(17);
+        }
+    }
+}

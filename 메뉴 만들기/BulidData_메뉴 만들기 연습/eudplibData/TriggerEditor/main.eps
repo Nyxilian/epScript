@@ -1,0 +1,12 @@
+import PluginVariables as msqcvar;
+import menu_Functions as mf;
+import menu_Graphics as mg;
+
+function onPluginStart() {
+	mf.variableInit();
+}
+
+function afterTriggerExec() {
+	mg.graphics();
+	SetMemory(0x6509A0, SetTo, 0); //EUD 터보
+}

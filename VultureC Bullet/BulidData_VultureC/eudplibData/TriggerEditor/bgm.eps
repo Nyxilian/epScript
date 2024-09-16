@@ -1,0 +1,34 @@
+const bgm_switch = PVariable(); // 플레이어 bgm on/off 스위치
+const bgm_length = PVariable(); // 플레이어 bgm 길이
+
+function play_init() {
+	foreach (cp : EUDLoopPlayer()) {
+		setcurpl(cp);
+		bgm_switch[cp] = 1;
+	}
+}
+
+function set_switch(cp, number) {
+	bgm_switch[cp] = number;
+}
+
+function set_length(cp, number) {
+	bgm_length[cp] = number;
+}
+
+function current_switch(cp) {
+	return bgm_switch[cp];
+}
+
+function play() {
+	foreach (cp : EUDLoopPlayer()) {
+		setcurpl(cp);
+		bgm_length[cp]++;
+		if (bgm_length[cp] == 1 && bgm_switch[cp] == 1) {
+			PlayWAV("staredit\\wav\\plutover.ogg");
+		}
+		if(bgm_length[cp] == 13620) {
+			bgm_length[cp] = 0;
+		}
+	}
+}

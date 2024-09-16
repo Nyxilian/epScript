@@ -1,0 +1,46 @@
+import functions as fx;
+
+var bossLoc = $L("Boss");
+var boss1EPD;
+var boss1Face;
+
+const s = StringBuffer(1024);
+
+function stage1() {
+    boss1Face = bread_epd(boss1EPD + 0x21/4, 1);
+    
+    if(fx.cur_bSwitch() == 0) {
+        SetMemory(0x657A9C, SetTo, 31);
+        boss1EPD = fx.SetNextUnitEPD();
+        CreateUnit(1, 15, bossLoc, 6);
+        fx.set_bSwitch(1);
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(2, "\x13\x1E━━━\x02━━━\x04━━ \x1F[ \x08위   험 \x1F]\x04 ━━\x02━━━\x1E━━━\n\n\x13\x07[\x04 Stage \x0F1 \x07]\n\n\x13\x04평범한 \x03시민\n\n\x13\x1E━━━\x02━━━━\x04━━━━━━━\x02━━━━\x1E━━━━");
+            CenterView("PlayerRevive");
+        }
+    }
+    fx.playerRevive();
+
+    fx.printBossHP(boss1EPD);
+
+    if(fx.bulletTimer(72) == True) {
+        CreateUnit(5, 194, bossLoc, 7);
+        setcurpl(7);
+        RunAIScriptAt("JYDg", bossLoc);
+    }
+
+    if(Deaths(6, Exactly, 1, 15)) {
+        KillUnit(19, Force1);
+        fx.set_bSwitch(0);
+        fx.set_pSwitch(0);
+        fx.set_Stage(2);
+        fx.bulletInit();
+        fx.playerBlockInit();
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            CenterView("PlayerRevive");
+        }
+    }
+}

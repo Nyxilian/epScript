@@ -1,0 +1,28 @@
+[main]
+input: ..\..\[미궁] Myosotis 개발용.scx
+output: ..\..\..\[미궁] Myosotis.scx
+[DataEditor.py]
+[ExtraDataEditor.py]
+[convertTerran]
+64,1 : 4,0
+[dataDumper]
+
+[chatEvent]
+__Addr__ : 0x58D900
+__ptrAddr__ : 0x58D904
+__patternAddr__ : 0x58D908
+__lenAddr__ : 0x58D90C
+
+
+[TriggerEditor\main.eps]
+
+
+[MSQC]
+QCDebug: False
+QCUnit: Matriarch (Queen)
+Z; NotTyping: Power Generator, 1
+X; NotTyping: Power Generator, 2
+INSERT; NotTyping: Power Generator, 3
+DELETE; NotTyping: Power Generator, 4
+[eudTurbo]
+

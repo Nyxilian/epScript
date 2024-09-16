@@ -1,0 +1,29 @@
+import PluginVariables as msqcvar;
+import functions as fx;
+
+const s = StringBuffer(1024);
+
+function onPluginStart() {
+
+	SetMemory(0x5124F0, SetTo, 21); //2배속
+	fx.playerRev();
+	fx.variableInit();
+     	foreach(cp : EUDLoopPlayer("Computer")) {
+		setcurpl(cp);
+		SetAllianceStatus(Force1, Enemy);
+	}
+	foreach(cp : EUDLoopPlayer("Human")) {
+		setcurpl(cp);
+		RunAIScript("+Vi7");
+	}
+}
+
+function beforeTriggerExec() {
+
+}
+
+function afterTriggerExec() {
+
+	fx.detectHold();
+	SetMemory(0x6509A0, SetTo, 0); //EUD터보
+}

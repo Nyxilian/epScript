@@ -1,0 +1,11 @@
+import System as sys;
+import keyboardController as kc;
+
+const t = StringBuffer(1024);
+const s = StringBuffer(1024);
+
+function keyboardScreen(cp) {
+    if(kc.keySwitch[cp] == 0) {
+        CenterView("keyboardView");
+    }
+}

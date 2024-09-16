@@ -1,0 +1,118 @@
+import functions as fx;
+
+const s = StringBuffer(1024);
+
+function intro() {
+    fx.set_BG(0);
+    foreach (cp : EUDLoopPlayer("Human")) {
+ 		setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(0,144)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x08\x13\"나의 유일한 \x0F희망\x08\"", wait=8, line=9);
+        }
+
+        if(fx.timer(144, 288)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x08\x13\"나의 유일한 도피처마저 \x03망가지고 \x08말았어...\"", wait=4, line=9);
+        }
+        
+        if(fx.timer(288, 360)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+        }
+        
+        if(fx.timer(360, 432)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x04\x13헉...", wait=8, line=9);
+        }
+
+        if(fx.timer(432, 528)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x04\x13이 익숙한 목소리는... 설마...?");
+        }
+
+        if(fx.timer(528,600)) {
+            fx.time_reset();
+            fx.Chapter_change(10);
+        }
+    }
+}
+
+function opening() {
+    foreach (cp: EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(0, 144)) {
+            s.printAt(0,"\n\n\n\n");
+            s.fadeIn("\x05\x13[ 미 궁 ] M y o s o t i s", wait=4, line=4);
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(144,148)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x05\x13[ 미 궁 ] M yo s o t i s");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(148,152)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x05\x13[ 미 궁 ] Myos o t i s");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(152,156)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x05\x13[ 미 궁 ] Myoso t i s");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(156,160)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x05\x13[ 미 궁] Myosot i s");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(160,164)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x05\x13[ 미궁] Myosoti s");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(164,168)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x05\x13[미궁] Myosotis");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(168,172)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x03\x13[미궁] Myosotis");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(172,176)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x04\x13[미궁] Myosotis");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(176,240)) {
+            s.printAt(0,"\n\n\n\n");
+            s.printAt(4, "\x04\x13[미궁] \x1DMyosotis");
+            s.printAt(5, "\n\n\n\n\n");
+        }
+        if(fx.timer(240,260)) {
+            fx.time_reset();
+            fx.Chapter_change(1);
+        }
+    }
+}

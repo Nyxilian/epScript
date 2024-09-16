@@ -1,0 +1,12 @@
+import menu_Functions as mf;
+
+var currentScreenX = 0; //플레이어 마다의 화면 크기
+
+const s = StringBuffer(1024);
+
+function graphics() {
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        currentScreenX = mf.checkScreenX();
+    }
+}

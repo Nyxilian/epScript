@@ -1,0 +1,220 @@
+import functions as fx;
+
+const s = StringBuffer(1024);
+
+function finale() {
+    fx.set_BG(0);
+    foreach(cp : EUDLoopPlayer()) {
+        setcurpl(cp);
+        CenterView("Story");
+
+        if(fx.off_bgm(cp)) {
+            s.printAt(10, "\x13\x07Ctrl + SS\x02를 눌러 브금을 꺼주세요. \x1DInsert\x02키로 다시 킬 수 있습니다.");
+        }
+
+        if(fx.on_bgm(cp)) {
+            s.printAt(10, "\x13브금을 켰습니다.");
+        }
+
+        if(fx.timer(68, 72)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+        
+        if(fx.timer(72, 240)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n");
+            s.printAt(8, "\x13\x04일기장을 다 읽고 그녀의 집을 수색하는 도중");
+        }
+        if(fx.timer(144,240)) {
+            s.printAt(9, "\x13\x04대문에서 누군가가 문을 두들기는 소리가 났다.");
+        }
+        if(fx.timer(240,264)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(264,360)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x11안녕하십니까, 혹시 \x04Cedar \x11탐정님이십니까?", wait=2, line=9);
+        }
+
+        if(fx.timer(360,408)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x04그렇습니다만");
+        }
+
+        if(fx.timer(408,504)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x11저는 Birdsfoot라고 하는 심령술사입니다.", wait=3, line=9);
+        }
+        if(fx.timer(504,600)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n");
+            s.printAt(8, "\x13\x11저는 Birdsfoot라고 하는 심령술사입니다.");
+            s.fadeIn("\x13\x11제 \x04쪽지\x11를 받으셨나 보군요.", wait=4, line=9);
+        }
+
+        if(fx.timer(600,672)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x11일기를 통해 알 수 있듯이",wait=4, line=9);
+        }
+        if(fx.timer(672,768)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n");
+            s.printAt(8, "\x13\x11일기를 통해 알 수 있듯이");
+            s.fadeIn("\x13\x11당신은 그녀에게 큰 지지대가 되어 주었습니다.", wait=3, line=9);
+        }
+        if(fx.timer(768,864)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n");
+            s.printAt(7, "\x13\x11일기를 통해 알 수 있듯이");
+            s.printAt(8, "\x13\x11당신은 그녀에게 큰 지지대가 되어 주었습니다.");
+            s.fadeIn("\x13\x11그러나 당신이 일 때문에 그녀를 소홀히 했기에", wait=3, line=9);
+        }
+        if(fx.timer(864,1008)) {
+            s.printAt(0,"\n\n\n\n\n\n\n");
+            s.printAt(6, "\x13\x11일기를 통해 알 수 있듯이");
+            s.printAt(7, "\x13\x11당신은 그녀에게 큰 지지대가 되어 주었습니다.");
+            s.printAt(8, "\x13\x11그러나 당신이 일 때문에 그녀를 소홀히 했기에");
+            s.fadeIn("\x13\x11그녀의 마지막 \x15울타리\x11도 무너지고 말았죠.", wait=4, line=9);
+        }
+
+        if(fx.timer(1008,1140)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x11당신은 충분히 이 \x1C사실\x11을 알고 있었을 것입니다.", wait=3, line=9);
+        }
+
+        if(fx.timer(1140, 1224)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x04그렇지만... 나는 몰랐어...");
+        }
+
+        if(fx.timer(1224,1320)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x11모르셨다구요?");
+        }
+
+        if(fx.timer(1320,1440)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x11그동안 당신이 받아왔던 \x04편지\x11를 생각해 보세요.",wait=3, line=9);
+        }
+        if(fx.timer(1440,1560)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n\n");
+            s.printAt(8, "\x13\x11그동안 당신이 받아왔던 \x04편지\x11를 생각해 보세요.");
+            s.fadeIn("\x13\x11당신이 \x03그녀\x11와 만난 \x1F3년\x11동안 당신이 받았던 \x08사랑\x11과",wait=3, line=9);
+        }
+        if(fx.timer(1560,1680)) {
+            s.printAt(0,"\n\n\n\n\n\n\n\n");
+            s.printAt(7, "\x13\x11그동안 당신이 받아왔던 \x04편지\x11를 생각해 보세요.");
+            s.printAt(8, "\x13\x11당신이 \x03그녀\x11와 만난 \x1F3년\x11동안 당신이 받았던 \x08사랑\x11과");
+            s.fadeIn("\x13\x11당신이 주었던 \x08사랑\x11을 비교해 보세요.", wait=3, line=9);
+        }
+        if(fx.timer(1680,1800)) {
+            s.printAt(0,"\n\n\n\n\n\n\n");
+            s.printAt(6, "\x13\x11그동안 당신이 받아왔던 \x04편지\x11를 생각해 보세요.");
+            s.printAt(7, "\x13\x11당신이 \x03그녀\x11와 만난 \x1F3년\x11동안 당신이 받았던 \x08사랑\x11과");
+            s.printAt(8, "\x13\x11당신이 주었던 \x08사랑\x11을 비교해 보세요.");
+            s.fadeIn("\x13\x11아직도 그녀가 얼마나 당신을 사랑했는지 모르시겠습니까?",wait=2, line=9);
+        }
+
+        if(fx.timer(1800,1920)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x11당신에게 선택의 기회를 드리겠습니다.", wait=4, line=9);
+        }
+
+        if(fx.timer(1920, 2016)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x11이것은 \x08독당근\x11입니다.");
+        }
+
+        if(fx.timer(2016, 2112)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(9, "\x13\x11이것을 먹으면 당신은 죽게 되지만");
+        }
+
+        if(fx.timer(2112,2232)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x03Geranium\x11은 다시 살아올 수 있게 됩니다.", wait=3, line=9);
+        }
+
+        if(fx.timer(2232,2352)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x11그녀에게 할 수 있는 마지막 \x08사랑\x11입니다.", wait=3, line=9);
+        }
+
+        if(fx.timer(2352,2472)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x05어떻게 하시겠습니까?", wait=8, line=9);
+        }
+
+        if(fx.timer(2472, 2592)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x04 ......", wait=8, line=9);
+        }
+
+        if(fx.timer(2592, 2712)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x04 먹 겠 습 니 다.", wait=4, line=9);
+        }
+
+        if(fx.timer(2712, 3000)) {
+            s.print("\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(2900, 2996)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x04 ......", wait=6, line=9);
+        }
+
+        if(fx.timer(2996, 3126)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x04 꿈이었나...?", wait=6, line=9);
+        }
+
+        if(fx.timer(3126,3200)) {
+            s.print("\n\n\x13\x04달\t력\n\n\x13\x042039년 3월 11일\n\n\n\n\n\n\n");
+        }
+
+        if(fx.timer(3200,3400)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n");
+            if(!s.fadeIn("\x13\x04그렇다면 내일은 \x03Geranium\x04과 만나고 난 후", wait=4, line=8)) {
+                s.fadeIn("\x13\x04그녀의 첫 생일이군.", wait=4, line=9);
+            }
+        }
+
+        if(fx.timer(3400,3520)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x04이번에는 반드시...", wait=4, line=9);
+        }
+
+        if(fx.timer(3520,3600)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x04반드시", wait=4, line=9);
+        }
+
+        if(fx.timer(3600,3720)) {
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.fadeIn("\x13\x08사랑\x04해줄게", wait=4, line=9);
+        }
+
+        if(fx.timer(3720,3800)) {
+            fx.time_reset();
+            fx.Chapter_change(9);
+        }
+    }
+}
+
+function EndingCredit() {
+    fx.set_BG(31);
+    foreach(cp : EUDLoopPlayer("Human")) {
+        setcurpl(cp);
+        CenterView("Story");
+        if(fx.timer(100,260)) {
+            s.print("\n\n\n\x13\x07플레이 \x04해주셔서 감사합니다!\n\n\n\x13\x04무심코 놓치고 있었던 주변이들에게 \x08사랑\x04을 표현해보는 건 어떨까요?\n\n\n\n\n");
+        }
+        if(fx.timer(260,740)) {
+            s.print("\x13\x04비록 저의 첫 자작 맵이지만\n\n\x13\x04즐겁게 즐겨주셨으면 하는 마음입니다.\n\x13\x04다운로드 받았던 글에 지금 현재 화면을 \x1F스샷\x04하셔서 올려주시고\n\x13\x04양식에 맞추어 저에게 연락해주시면 됩니다\n\n\x12\x08S\x04pecial \x07T\x04hanks to:\n\n\x12\x11W\x04oozoo(Story Advisor)\n\x12\x08A\x04vlos(Engineering)\n\x12\x07c\x04om''(Engineering)");
+        }
+        if(fx.timer(740,980)) {
+            s.print("\n\n\x13\x04[미궁] \x1DMyosotis\n\n\n\n\n\n\x12\x0EO\x04p \x07K\x04iyoN-\n\x12\x04Mady By \x08K\x04iyoN.\x11C\x04hocochip\n\x12\x04제작기간 2021.06.05~2021.06.08\n");
+        }
+        if(fx.timer(980,1000)) {
+            Victory();
+        }
+    }
+}

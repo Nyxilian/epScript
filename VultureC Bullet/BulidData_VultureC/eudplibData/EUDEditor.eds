@@ -1,0 +1,27 @@
+[main]
+input: ..\..\벌컨 제작용.scx
+output: ..\..\[EUD] VultureC ㅁㄹ....scx
+[DataEditor.py]
+[ExtraDataEditor.py]
+[dataDumper]
+..\temp\custom_txt.tbl : 0x6D5A30, copy
+
+[TriggerEditor\main.eps]
+
+
+[MSQC]
+QCDebug: False
+QCUnit: Matriarch (Queen)
+INSERT; NotTyping: Power Generator, 1
+DELETE; NotTyping: Power Generator, 2
+Z; NotTyping: Power Generator, 4
+X; NotTyping: Power Generator, 8
+[noAirCollision]
+[chatEvent]
+__Addr__ : 0x58D900
+__ptrAddr__ : 0x58D904
+__patternAddr__ : 0x58D908
+__lenAddr__ : 0x58D90C
+
+
+

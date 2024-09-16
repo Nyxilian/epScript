@@ -1,0 +1,48 @@
+import PluginVariables as msqcvar;
+import System as sys;
+import displayText as dt;
+import bottomBar as bb;
+
+const s = StringBuffer(1024);
+
+const saveMX	= PVariable();
+const saveMY	= PVariable();
+const saveSX	= PVariable();
+
+const selectText	= PVariable();
+
+function onPluginStart(){
+
+	randomize();
+	sys.variableInit();
+	foreach(cp : EUDLoopPlayer("Human")){
+		setcurpl(cp);
+		sys.textUpdate[cp] = 1; //최초 화면갱신
+	}
+}
+
+function beforeTriggerExec(){
+
+	SetMemory(0x6509A0, SetTo, 0); //EUD터보
+	foreach(cp : EUDLoopPlayer("Human")){
+		setcurpl(cp);
+		sys.checkScreenMouse(); //비공유 좌표 및 크기 산출
+		if(sys.mouseClick[cp] == 1){
+			saveMX[cp] = sys.mouseUserX[cp];
+			saveMY[cp] = sys.mouseUserY[cp];
+			saveSX[cp] = sys.screenUserX[cp];
+		}
+		s.printAt(0, "\x13mouseX : ", saveMX[cp], "  mouseY : ", saveMY[cp], "  screenSizeX : ", saveSX[cp], "  screenX : ", saveMX[cp]+320-saveSX[cp], "  screenY : ", saveMY[cp]);
+	}
+}
+
+function afterTriggerExec(){
+
+	foreach(cp : EUDLoopPlayer("Human")){
+		setcurpl(cp);
+		//텍스트 출력담당
+		if(selectText[cp] == 0){dt.displayText1(cp);}
+		else if(selectText[cp] == 1){dt.displayText2(cp);}
+		bb.bottomText(cp);
+	}
+}

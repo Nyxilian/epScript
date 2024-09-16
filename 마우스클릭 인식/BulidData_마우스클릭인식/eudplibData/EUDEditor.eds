@@ -1,0 +1,18 @@
+[main]
+input: ..\..\TEST맵5.scx
+output: ..\..\EUD 마우스클릭인식.scx
+[DataEditor.py]
+[ExtraDataEditor.py]
+[dataDumper]
+
+[TriggerEditor\main.eps]
+
+
+[MSQC]
+QCDebug : False
+readMode.Exactly(1); MouseDown(L) : mouseClick, 1
+readMode.Exactly(1); MouseDown(L); val, 0x6CDDC4 : mouseUserX
+readMode.Exactly(1); MouseDown(L); val, 0x6CDDC8 : mouseUserY
+readMode.Exactly(1); MouseDown(L); val, screenSizeX : screenUserX
+
+

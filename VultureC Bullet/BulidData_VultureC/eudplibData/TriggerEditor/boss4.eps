@@ -1,0 +1,93 @@
+import functions as fx;
+
+var bossLoc = $L("Boss");
+var boss4EPD;
+var boss4Face;
+var boss4AttkCycle;
+var bulletTime = 0;
+var bulletDir = 0;
+var bulletRotDir = 0;
+const bulletRot = [2, 250];
+
+const s = StringBuffer(1024);
+
+function stage4() {
+    boss4Face = bread_epd(boss4EPD + 0x21/4, 1);
+    boss4AttkCycle = bread_epd(boss4EPD + 0x55/4, 1);
+
+    once {
+        wwrite(0x6C9858 + 2752 + 163 * 2, 369);
+        dwwrite(0x6C9858 + 1696 + 163 * 4, 1700);
+        fx.setBulletDam(3, 15);
+    }
+
+    if(fx.cur_bSwitch() == 0) { //보스 소환
+        boss4EPD = fx.SetNextUnitEPD();
+        CreateUnit(1, 58, bossLoc, 6);
+        fx.set_bSwitch(1);
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            s.printAt(0, "\n\n\n\n\n\n\n\n\n");
+            s.printAt(2, "\x13\x1E━━━\x02━━━\x04━━ \x1F[ \x08위   험 \x1F]\x04 ━━\x02━━━\x1E━━━\n\n\x13\x07[\x04 Stage \x114 \x07]\n\n\x13\x04나선 \x03발키리\n\n\x13\x1E━━━\x02━━━━\x04━━━━━━━\x02━━━━\x1E━━━━");
+        }
+    }
+    
+    fx.playerRevive(); //플레이어 소환
+
+    fx.printBossHP(boss4EPD);
+
+    bulletTime++;
+    if(bulletTime % 288 > 216) {
+        bulletRotDir = 1;
+    }
+    if(bulletTime % 288 == 0) {
+        bulletRotDir = 0;
+    }
+
+    if(fx.bulletTimer(40) == True) { //중앙 미사일
+        CreateUnit(9, 194, bossLoc, 7);
+        setcurpl(7);
+        RunAIScriptAt("JYDg", bossLoc);
+    }
+
+    if(fx.bulletTimer(6) == True) { //보스 패턴
+        var currentMissile;
+        for(var i = 0; i < 4; i++) {
+            currentMissile = fx.SetNextUnitEPD();
+            CreateUnit(1, 197, bossLoc, 6);
+            fx.SetMissileDir(currentMissile, (i * 64 + bulletDir) % 256);
+        }
+        Order(197, 6, "Anywhere", Move, "PlayerRevive");
+        bulletDir += bulletRot[bulletRotDir];
+    }
+
+    if(boss4AttkCycle == 119) { //보스 기본 공격
+        var currentMissile;
+        var boss4TargetEPD = EPD(dwread_epd(boss4EPD + 0x5C/4));
+        var boss4TargetPlayer = bread_epd(boss4TargetEPD + 0x4C/4, 0);
+        currentMissile = fx.SetNextUnitEPD();
+        CreateUnit(1, 195, bossLoc, 6);
+        MoveLocation("BossTarget", 19, boss4TargetPlayer, "Anywhere");
+        Order(195, 6, bossLoc, Move, "BossTarget");
+    }
+
+    if(Bring(6, Exactly, 1, 195, "BossTarget") || boss4AttkCycle == 72) {
+        KillUnitAt(1, 195, "BossTarget", 6);
+        CreateUnit(7, 194, "BossTarget", 6);
+        setcurpl(6);
+        RunAIScriptAt("JYDg", "BossTarget");
+    }
+
+    if(Deaths(6, Exactly, 1, 58)) {
+        KillUnit(19, Force1);
+        fx.set_bSwitch(0);
+        fx.set_pSwitch(0);
+        fx.set_Stage(5);
+        fx.bulletInit();
+        fx.playerBlockInit();
+        foreach(cp : EUDLoopPlayer("Human")) {
+            setcurpl(cp);
+            CenterView("PlayerRevive");
+        }
+    }
+}

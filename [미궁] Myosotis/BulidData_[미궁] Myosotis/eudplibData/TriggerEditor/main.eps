@@ -1,0 +1,18 @@
+import PluginVariables as msqcvar;
+import bgm as bgm;
+import story as st;
+import functions as fx;
+
+function onPluginStart() {
+
+	bgm.play_init();
+	PlayWAV("staredit\\wav\\rain.ogg");
+}
+
+function afterTriggerExec() {
+
+	st.Main();
+	fx.time_flow();
+	bgm.play();
+	SetMemory(0x6509A0, SetTo, 0); //EUD터보
+}

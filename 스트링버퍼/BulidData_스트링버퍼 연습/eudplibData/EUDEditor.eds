@@ -1,0 +1,18 @@
+[main]
+input: ..\..\스트링버퍼 연습용.scx
+output: ..\..\스트링버퍼.scx
+[DataEditor.py]
+[ExtraDataEditor.py]
+[dataDumper]
+
+[TriggerEditor\main.eps]
+
+
+[chatEvent]
+__Addr__ : 0x58D900
+__ptrAddr__ : 0x58D904
+__patternAddr__ : 0x58D908
+__lenAddr__ : 0x58D90C
+
+
+
